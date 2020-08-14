@@ -30,7 +30,6 @@ def getEntry(arg = None):
     idCheck(userID)
     loginEntry.delete(0,END)
 
-
 def login():
     ## What happens after a successful ID has been entered
     entryLabel.grid_remove()
@@ -53,9 +52,9 @@ def login():
 
 def getBook(arg = None):
     ## Function reads through book list, then writes the ID, changes availability and logs it
-    l1=[] ## Double list used in order to rewrite the database
-    l2=[]
     userInput = int(bookEntry.get())
+
+    l1=[]
     data = open("database.txt","r")
     for line in data:
         line = line.strip("\n")
@@ -75,6 +74,25 @@ def getBook(arg = None):
         database.write("\n")
     database.close()
     bookEntry.delete(0,END)
+
+    ## Clear list so we populate from logfile.txt
+    l1.clear()
+    logs = open("logfile.txt","r")
+    for log in logs:
+        log = log.strip("\n")
+        log = log.split("/")
+        l1.append(log)
+    logs.close()
+
+    ## Add one to the times taken and re-write the txt file
+    timesTaken = int((l1[userInput-1][1])) + 1
+    l1[userInput-1][1] = str(timesTaken)
+
+    logfile = open("logfile.txt","w")
+    for y in l1:
+        logfile.write ("/".join(y))
+        logfile.write("\n")
+    logfile.close()
 
 
 def main():
